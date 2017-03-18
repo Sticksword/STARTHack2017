@@ -13,6 +13,8 @@ from flask import Flask, g, redirect, request, make_response, send_from_director
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
 
+# Database config & private methods
+
 DATABASE = 'database.db'
 
 def get_db():
@@ -35,6 +37,8 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
+# End DB stuff
+
 @app.route('/')
 def index():
     return 'hello world'
@@ -43,6 +47,9 @@ def index():
 @app.route('/js/<path:path>')
 def send_js(path):
     return send_from_directory('js', path)
+
+
+# Deutsch Bank API stuff
 
 @app.route('/login')
 def login():
@@ -72,7 +79,8 @@ def auth_callback():
     with open('access_token', 'w') as f:
         f.write(res['access_token'])
     # in_memory_access_token.encode('ascii','ignore')
-    return 'login success!' # can redirect here or something
+    return 'login success! you can now visit localhost:5000/transactions or another endpoint for data'
+    # can redirect here or something
 
 
 @app.route('/transactions')
@@ -99,7 +107,90 @@ def transactions():
     if res['errorDescription'] and res['errorDescription'] == 'Invalid access token':
         return redirect('/login')
     else:
-        return res
+        return jsonify(res)
+
+@app.route('/userInfo')
+def userInfo():
+    print('userInfo')
+    with open('access_token', 'r') as f:
+        token = f.read()
+
+    print(token)
+    url = "https://simulator-api.db.com/gw/dbapi/v1/userInfo"
+
+    headers = {
+        'authorization': "Bearer " + token,
+        'cache-control': "no-cache",
+        'postman-token': "f69c186c-4835-241a-02d2-59286fcfb235"
+        }
+
+    response = requests.request("GET", url, headers=headers)
+
+    res = json.loads(response.text)
+    print(res)
+    if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
+        return redirect('/login')
+    else:
+        return jsonify(res)
+
+# Yelp API stuff
+
+@app.route('/businesses')
+def businesses():
+    with open('yelp_access_token', 'r') as f:
+        token = f.read().strip()
+
+    url = "https://api.yelp.com/v3/businesses/search"
+
+    loc = 'Zurich'
+    prices = map(str, [1, 2, 3])
+    prices = ','.join(prices)
+
+    querystring = {"location": loc, "price": prices}
+
+    headers = {
+        'authorization': "Bearer " + token,
+        'cache-control': "no-cache"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    res = json.loads(response.text)
+    return jsonify(res)
+
+
+# Amadeus API stuff
+
+@app.route('/flights')
+def flights():
+    orig = 'SFO'
+    dest = 'LON'
+    dep_date = '2017-05-01'
+    ret_date = '2017-05-07'
+    num_results = '3'
+
+    url = "http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search"
+
+    querystring = {
+        "origin":orig,
+        "destination":dest,
+        "departure_date":dep_date,
+        "return_date":ret_date,
+        "number_of_results":num_results,
+        "apikey":"hUC0xqSrg9Crf4lbVTjcx1hRzUg4si4Q"
+        }
+
+    headers = {
+        'cache-control': "no-cache"
+        }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    print(response.text)
+
+    res = json.loads(response.text)
+
+    return jsonify(res)
 
 
 
@@ -136,16 +227,15 @@ def show_post(post_id):
     # show the post with the given id, the id is an integer
     return 'Post %d' % post_id
 
-
-def init():
-    print('initializing')
-    init_db()
-
 @atexit.register
 def goodbye():
     print('You are now leaving the Python sector.')
 
 # end examples
+
+def init():
+    print('initializing')
+    init_db()
 
 # main
 
