@@ -229,6 +229,7 @@ def planItinerary():
     info = { 'name': destination }
 
     info['top rated local busineses'] = buildBusinessExpenses(destination, persona)
+    info['flights'] = buildFlightExpenses(destination, persona)
 
     return jsonify(info)
 
@@ -247,6 +248,29 @@ def buildBusinessExpenses(destination, persona):
         print(biz['name'])
 
     return potential_business_expenses
+
+
+def buildFlightExpenses(destination, persona):
+    possible_flights = json.loads(flights())
+    group = 'economy'
+    if persona == 'student':
+        group = 'economy'
+    elif persona == 'family':
+        group = 'economy'
+    elif persona == 'business':
+        group = 'business'
+    else:
+        group = '1st class'
+
+    potential_flight_expenses = []
+    for flight in possible_flights:
+        potential_flight_expenses.append({
+            'total price': flight['fare']['total_price'],
+            'class': group
+        })
+
+    return potential_flight_expenses
+
 
 # Amadeus API stuff
 
@@ -279,7 +303,7 @@ def flights():
 
     res = json.loads(response.text)
 
-    return jsonify(res)
+    return json.dumps(res['results'])
 
 
 
