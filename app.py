@@ -228,13 +228,13 @@ def planItinerary():
 
     info = { 'name': destination }
 
-    info['expenses'] = buildExpenses(destination, persona)
+    info['top rated local busineses'] = buildBusinessExpenses(destination, persona)
 
     return jsonify(info)
 
 
 # add yelp and amadeus integraton here
-def buildExpenses(destination, persona):
+def buildBusinessExpenses(destination, persona):
     local_businesses = json.loads(businesses(persona, destination))
 
     potential_business_expenses = []
@@ -246,7 +246,7 @@ def buildExpenses(destination, persona):
         })
         print(biz['name'])
 
-    return { 'flight': 500, 'top rated local businesses': potential_business_expenses }
+    return potential_business_expenses
 
 # Amadeus API stuff
 
