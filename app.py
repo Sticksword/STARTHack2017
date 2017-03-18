@@ -4,14 +4,36 @@ import json
 import os
 import csv
 import atexit
+import requests
+import sqlite3
 
-from flask import Flask, request, make_response, send_from_directory, render_template, jsonify
+from flask import Flask, g, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
-in_memory_db = {}
-message_db = {}
+
+DATABASE = 'database.db'
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    print(exception)
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+def init_db():
+    with app.app_context():
+        db = get_db()
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
 
 @app.route('/')
 def index():
@@ -22,44 +44,63 @@ def index():
 def send_js(path):
     return send_from_directory('js', path)
 
+@app.route('/login')
+def login():
+    return redirect("https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback", code=302)
 
-
-
-@app.route('/demo', methods=['POST'])
-def upload_demo():
+@app.route('/callback')
+def auth_callback():
+    print('callback')
     print(request)
-    phrase = request.form.get('demo')
-    print(phrase)
-    google_response = analyse_sentences(phrase)
-    inhouse_response = json.loads(classify_comments(phrase))
-    # print(inhouse_response['Photos']['0'])
-    # print(google_response)
-    google_response['photos'] = inhouse_response['Photos']['0']
-    r = make_response(json.dumps(google_response, indent=4))
-    r.headers['Content-Type'] = 'application/json'
-    return r
+    code = request.args.get('code')
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    print('hello from upload_file')
-    print(request)
-    print('form')
-    print(request.form)
-    print('array')
-    arr_of_arr = request.get_array(field_name='file')
-    print(arr_of_arr)
+    url = "https://simulator-api.db.com/gw/oidc/token"
 
-    res_arr = []
-    for i in range(len(arr_of_arr)):
-        print(arr_of_arr[i])
-        inhouse_response = json.loads(classify_comments(arr_of_arr[i][0]))
-        print(inhouse_response)
-        google_response = analyse_sentences(arr_of_arr[i][0])
-        google_response['photos'] = inhouse_response['Photos']['0']
-        res_arr.append(google_response)
-    r = make_response(json.dumps(res_arr, indent=4))
-    r.headers['Content-Type'] = 'application/json'
-    return r
+    payload = "grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=" + code
+    headers = {
+        'authorization': "Basic ODhkZmE4NWEtZWI4My00M2M1LWE3MzktNDdiYWY4MjM0YzE1OmIwXy1sR1BUd05paFZuTDhjazVyLWpUZnA3V01YY1JZOUtMNW1OT1BBVUNGWkZNNGNVX0tjU3Y1U3JzZ2hKSlVtOTJCd3pRYXpBOGt3SXZqeS04djZn",
+        'content-type': "application/x-www-form-urlencoded",
+        'cache-control': "no-cache",
+        'postman-token': "b9b43acb-e462-b49b-d4fd-18de9fe1ff30"
+        }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    res = json.loads(response.text)
+    print(res)
+    print(res['access_token'])
+    with open('access_token', 'w') as f:
+        f.write(res['access_token'])
+    # in_memory_access_token.encode('ascii','ignore')
+    return 'login success!' # can redirect here or something
+
+
+@app.route('/transactions')
+def transactions():
+    print('transactions')
+    with open('access_token', 'r') as f:
+        token = f.read()
+
+    print(token)
+    url = "https://simulator-api.db.com/gw/dbapi/v1/transactions"
+
+    headers = {
+        'authorization': "Bearer " + token,
+        'cache-control': "no-cache",
+        'postman-token': "f69c186c-4835-241a-02d2-59286fcfb235"
+        }
+
+    response = requests.request("GET", url, headers=headers)
+
+    res = json.loads(response.text)
+    print(res)
+    if type(res) == list:
+        return jsonify({'transactions': res})
+    if res['errorDescription'] and res['errorDescription'] == 'Invalid access token':
+        return redirect('/login')
+    else:
+        return res
+
 
 
 # example stuff, can ignore
@@ -98,6 +139,7 @@ def show_post(post_id):
 
 def init():
     print('initializing')
+    init_db()
 
 @atexit.register
 def goodbye():
