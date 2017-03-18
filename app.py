@@ -6,6 +6,7 @@ import csv
 import atexit
 import requests
 import sqlite3
+import random
 
 from flask import Flask, g, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
@@ -54,7 +55,7 @@ def send_js(path):
 
 @app.route('/login')
 def login():
-    return redirect("https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback", code=302)
+    return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback', code=302)
 
 @app.route('/callback')
 def auth_callback():
@@ -62,17 +63,17 @@ def auth_callback():
     print(request)
     code = request.args.get('code')
 
-    url = "https://simulator-api.db.com/gw/oidc/token"
+    url = 'https://simulator-api.db.com/gw/oidc/token'
 
-    payload = "grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=" + code
+    payload = 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=' + code
     headers = {
-        'authorization': "Basic ODhkZmE4NWEtZWI4My00M2M1LWE3MzktNDdiYWY4MjM0YzE1OmIwXy1sR1BUd05paFZuTDhjazVyLWpUZnA3V01YY1JZOUtMNW1OT1BBVUNGWkZNNGNVX0tjU3Y1U3JzZ2hKSlVtOTJCd3pRYXpBOGt3SXZqeS04djZn",
-        'content-type': "application/x-www-form-urlencoded",
-        'cache-control': "no-cache",
-        'postman-token': "b9b43acb-e462-b49b-d4fd-18de9fe1ff30"
+        'authorization': 'Basic ODhkZmE4NWEtZWI4My00M2M1LWE3MzktNDdiYWY4MjM0YzE1OmIwXy1sR1BUd05paFZuTDhjazVyLWpUZnA3V01YY1JZOUtMNW1OT1BBVUNGWkZNNGNVX0tjU3Y1U3JzZ2hKSlVtOTJCd3pRYXpBOGt3SXZqeS04djZn',
+        'content-type': 'application/x-www-form-urlencoded',
+        'cache-control': 'no-cache',
+        'postman-token': 'b9b43acb-e462-b49b-d4fd-18de9fe1ff30'
         }
 
-    response = requests.request("POST", url, data=payload, headers=headers)
+    response = requests.request('POST', url, data=payload, headers=headers)
 
     res = json.loads(response.text)
     print(res)
@@ -91,15 +92,15 @@ def transactions():
         token = f.read()
 
     print(token)
-    url = "https://simulator-api.db.com/gw/dbapi/v1/transactions"
+    url = 'https://simulator-api.db.com/gw/dbapi/v1/transactions'
 
     headers = {
-        'authorization': "Bearer " + token,
-        'cache-control': "no-cache",
-        'postman-token': "f69c186c-4835-241a-02d2-59286fcfb235"
+        'authorization': 'Bearer ' + token,
+        'cache-control': 'no-cache',
+        'postman-token': 'f69c186c-4835-241a-02d2-59286fcfb235'
         }
 
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request('GET', url, headers=headers)
 
     res = json.loads(response.text)
     print(res)
@@ -117,15 +118,15 @@ def userInfo():
         token = f.read()
 
     print(token)
-    url = "https://simulator-api.db.com/gw/dbapi/v1/userInfo"
+    url = 'https://simulator-api.db.com/gw/dbapi/v1/userInfo'
 
     headers = {
-        'authorization': "Bearer " + token,
-        'cache-control': "no-cache",
-        'postman-token': "f69c186c-4835-241a-02d2-59286fcfb235"
+        'authorization': 'Bearer ' + token,
+        'cache-control': 'no-cache',
+        'postman-token': 'f69c186c-4835-241a-02d2-59286fcfb235'
         }
 
-    response = requests.request("GET", url, headers=headers)
+    response = requests.request('GET', url, headers=headers)
 
     res = json.loads(response.text)
     print(res)
@@ -135,29 +136,41 @@ def userInfo():
         return jsonify(res)
 
 # Yelp API stuff
-
 @app.route('/businesses')
-def businesses():
+def businesses(persona=None, loc=None):
     with open('yelp_access_token', 'r') as f:
         token = f.read().strip()
 
-    url = "https://api.yelp.com/v3/businesses/search"
+    url = 'https://api.yelp.com/v3/businesses/search'
 
-    loc = 'Zurich'
-    prices = map(str, [1, 2, 3])
-    prices = ','.join(prices)
+    if not loc:
+        loc = 'Zurich'
+    if not persona:
+        persona = 'student'
 
-    querystring = {"location": loc, "price": prices}
+    if persona == 'student':
+        prices = 1
+    elif persona == 'family':
+        prices = 2
+    elif persona == 'business':
+        prices = 3
+    else:
+        prices = 4
+    # prices = map(str, [1, 2, 3])
+    # prices = ','.join(prices)
+
+    querystring = {'location': loc, 'price': prices, 'limit': '5'}
 
     headers = {
-        'authorization': "Bearer " + token,
-        'cache-control': "no-cache"
+        'authorization': 'Bearer ' + token,
+        'cache-control': 'no-cache'
         }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request('GET', url, headers=headers, params=querystring)
 
     res = json.loads(response.text)
-    return jsonify(res)
+    res = res['businesses']
+    return json.dumps(res)
 
 # Trip generation logic
 
@@ -170,23 +183,37 @@ def destinations():
     loc = []
     loc.append(
       {
-        "id": "london",
-        "name": "London",
-        "total_expense": 800
+        'id': 'london',
+        'name': 'London',
+        'total_expense': 800
       }
     )
     loc.append(
       {
-        "id": "paris",
-        "name": "Paris",
-        "total_expense": 1000
+        'id': 'paris',
+        'name': 'Paris',
+        'total_expense': 1000
       }
     )
     loc.append(
       {
-        "id": "nyc",
-        "name": "New York City",
-        "total_expense": 700
+        'id': 'nyc',
+        'name': 'New York City',
+        'total_expense': 700
+      }
+    )
+    loc.append(
+      {
+        'id': 'barcelona',
+        'name': 'Barcelona',
+        'total_expense': 500
+      }
+    )
+    loc.append(
+      {
+        'id': 'zurich',
+        'name': 'Zurich',
+        'total_expense': 1100
       }
     )
 
@@ -201,14 +228,25 @@ def planItinerary():
 
     info = { 'name': destination }
 
-    info['expenses'] = buildExpenses()
+    info['expenses'] = buildExpenses(destination, persona)
 
     return jsonify(info)
 
 
 # add yelp and amadeus integraton here
-def buildExpenses():
-    return { 'flight': 500, 'food': 200 }
+def buildExpenses(destination, persona):
+    local_businesses = json.loads(businesses(persona, destination))
+
+    potential_business_expenses = []
+    for biz in local_businesses:
+        cost = len(biz['price']) * 10 + random.randint(0, 10)
+        potential_business_expenses.append({
+            biz['categories'][0]['title'] : cost,
+            'business name': biz['name'].encode("utf8")
+        })
+        print(biz['name'])
+
+    return { 'flight': 500, 'top rated local businesses': potential_business_expenses }
 
 # Amadeus API stuff
 
@@ -220,22 +258,22 @@ def flights():
     ret_date = '2017-05-07'
     num_results = '3'
 
-    url = "http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search"
+    url = 'http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search'
 
     querystring = {
-        "origin":orig,
-        "destination":dest,
-        "departure_date":dep_date,
-        "return_date":ret_date,
-        "number_of_results":num_results,
-        "apikey":"hUC0xqSrg9Crf4lbVTjcx1hRzUg4si4Q"
+        'origin':orig,
+        'destination':dest,
+        'departure_date':dep_date,
+        'return_date':ret_date,
+        'number_of_results':num_results,
+        'apikey':'hUC0xqSrg9Crf4lbVTjcx1hRzUg4si4Q'
         }
 
     headers = {
-        'cache-control': "no-cache"
+        'cache-control': 'no-cache'
         }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request('GET', url, headers=headers, params=querystring)
 
     print(response.text)
 
