@@ -242,7 +242,7 @@ def buildExpenses(destination, persona):
         cost = len(biz['price']) * 10 + random.randint(0, 10)
         potential_business_expenses.append({
             biz['categories'][0]['title'] : cost,
-            'business name': biz['name'].encode("utf8")
+            'business name': biz['name']
         })
         print(biz['name'])
 
