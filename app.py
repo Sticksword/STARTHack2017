@@ -158,6 +158,11 @@ def businesses():
     res = json.loads(response.text)
     return jsonify(res)
 
+# Trip generation logic
+
+def planItinerary():
+    
+
 
 # Amadeus API stuff
 
