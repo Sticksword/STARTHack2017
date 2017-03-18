@@ -199,7 +199,7 @@ def destinations():
       {
         'id': 'nyc',
         'name': 'New York City',
-        'total_expense': 700
+        'total_expense': 1200
       }
     )
     loc.append(
@@ -228,7 +228,7 @@ def planItinerary():
 
     info = { 'name': destination }
 
-    info['top rated local busineses'] = buildBusinessExpenses(destination, persona)
+    info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
     info['flights'] = buildFlightExpenses(destination, persona)
 
     return jsonify(info)
@@ -242,8 +242,9 @@ def buildBusinessExpenses(destination, persona):
     for biz in local_businesses:
         cost = len(biz['price']) * 10 + random.randint(0, 10)
         potential_business_expenses.append({
-            biz['categories'][0]['title'] : cost,
-            'business name': biz['name']
+            'category': biz['categories'][0]['title'],
+            'price': cost,
+            'business_name': biz['name']
         })
         # print(biz['name'])
 
@@ -265,7 +266,7 @@ def buildFlightExpenses(destination, persona):
     potential_flight_expenses = []
     for flight in possible_flights:
         potential_flight_expenses.append({
-            'total price': flight['fare']['total_price'],
+            'total_price': flight['fare']['total_price'],
             'class': group
         })
 
