@@ -245,7 +245,7 @@ def buildBusinessExpenses(destination, persona):
             biz['categories'][0]['title'] : cost,
             'business name': biz['name']
         })
-        print(biz['name'])
+        # print(biz['name'])
 
     return potential_business_expenses
 
