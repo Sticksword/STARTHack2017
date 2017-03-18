@@ -161,7 +161,7 @@ def businesses():
 # Trip generation logic
 
 def planItinerary():
-    
+    return 'plan'
 
 
 # Amadeus API stuff
