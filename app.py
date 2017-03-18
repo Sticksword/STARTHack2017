@@ -13,6 +13,7 @@ from flask import Flask, g, redirect, request, make_response, send_from_director
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
 
+
 # Database config & private methods
 
 DATABASE = 'database.db'
@@ -158,6 +159,56 @@ def businesses():
     res = json.loads(response.text)
     return jsonify(res)
 
+# Trip generation logic
+
+@app.route('/destinations')
+def destinations():
+    persona = request.args.get('persona')
+    duration = request.args.get('duration')
+    month = request.args.get('month')
+
+    loc = []
+    loc.append(
+      {
+        "id": "london",
+        "name": "London",
+        "total_expense": 800
+      }
+    )
+    loc.append(
+      {
+        "id": "paris",
+        "name": "Paris",
+        "total_expense": 1000
+      }
+    )
+    loc.append(
+      {
+        "id": "nyc",
+        "name": "New York City",
+        "total_expense": 700
+      }
+    )
+
+    return jsonify(loc)
+
+@app.route('/details')
+def planItinerary():
+    destination = request.args.get('destination')
+    persona = request.args.get('persona')
+    duration = request.args.get('duration')
+    month = request.args.get('month')
+
+    info = { 'name': destination }
+
+    info['expenses'] = buildExpenses()
+
+    return jsonify(info)
+
+
+# add yelp and amadeus integraton here
+def buildExpenses():
+    return { 'flight': 500, 'food': 200 }
 
 # Amadeus API stuff
 

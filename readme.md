@@ -9,7 +9,7 @@ Personas
 - high_performer
 
 
-GET  /destinations?persona=student&duration_in_days=5&month=12
+GET  /destinations?persona=student&duration=5&month=12
 [
   {
     "id": "london",
@@ -19,7 +19,7 @@ GET  /destinations?persona=student&duration_in_days=5&month=12
 ]
 
 
-GET  /details?destination=london&persona=student&duration_in_days=5&month=12
+GET  /details?destination=london&persona=student&duration=5&month=12
 {
   "id": "london",
   "name": "London",
