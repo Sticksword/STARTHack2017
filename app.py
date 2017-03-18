@@ -15,7 +15,7 @@ message_db = {}
 
 @app.route('/')
 def index():
-    return 'hello world''
+    return 'hello world'
 
 
 @app.route('/js/<path:path>')
