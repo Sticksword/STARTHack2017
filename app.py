@@ -185,6 +185,7 @@ def userInfo():
 
 
 @app.route('/bankAccountInfo')
+@crossdomain(origin='*')
 def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
     return jsonify({'balance': 800.95 })
@@ -248,6 +249,7 @@ def businesses(loc=None, persona=None):
 # Trip generation logic
 
 @app.route('/destinations')
+@crossdomain(origin='*')
 def destinations():
     persona = request.args.get('persona')
     duration = int(request.args.get('duration'))
