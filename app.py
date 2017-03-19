@@ -124,8 +124,12 @@ def auth_callback():
     response = requests.request('POST', url, data=payload, headers=headers)
 
     res = json.loads(response.text)
-    print(res)
-    print(res['access_token'])
+    # print(res)
+    # print(res['access_token'])
+    if not 'access_token' in res:
+        return redirect('http://start-hack.herokuapp.com/', code=302)
+    print('access_token' in res)
+
     with open('access_token', 'w') as f:
         f.write(res['access_token'])
     # in_memory_access_token.encode('ascii','ignore')
@@ -154,7 +158,7 @@ def transactions():
     print(res)
     if type(res) == list:
         return jsonify({'transactions': res})
-    if res['errorDescription'] and res['errorDescription'] == 'Invalid access token':
+    if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
         return redirect('/login')
     else:
         return jsonify(res)
@@ -260,7 +264,7 @@ def destinations():
       {
         'id': 'london',
         'name': 'London',
-        'total_expense': 300 + 176 * duration
+        'total_expense': 980
       }
     )
     loc.append(
@@ -373,6 +377,22 @@ def flights(destination, persona, month):
         dest = 'JFK'
     elif destination == 'ZURICH':
         dest = 'ZRH'
+
+    month = int(month)
+    month = {
+        1: '01',
+        2: '02',
+        3: '03',
+        4: '04',
+        5: '05',
+        6: '06',
+        7: '07',
+        8: '08',
+        9: '09',
+        10: '10',
+        11: '11',
+        12: '12',
+    }.get(month, '05')
 
     dep_date = '2017-' + '05' + '-01'
     ret_date = '2017-' + '05' + '-07'
