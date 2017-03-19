@@ -124,8 +124,10 @@ def auth_callback():
     response = requests.request('POST', url, data=payload, headers=headers)
 
     res = json.loads(response.text)
-    print(res)
-    print(res['access_token'])
+    # print(res)
+    # print(res['access_token'])
+    if 'access_token' not in res:
+        redirect('/')
     with open('access_token', 'w') as f:
         f.write(res['access_token'])
     # in_memory_access_token.encode('ascii','ignore')
