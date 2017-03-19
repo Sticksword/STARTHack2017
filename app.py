@@ -128,6 +128,7 @@ def auth_callback():
     # print(res['access_token'])
     if not 'access_token' in res:
         redirect('/')
+    print(res)
 
     with open('access_token', 'w') as f:
         f.write(res['access_token'])
