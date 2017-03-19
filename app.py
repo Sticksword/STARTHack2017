@@ -158,7 +158,7 @@ def transactions():
     print(res)
     if type(res) == list:
         return jsonify({'transactions': res})
-    if res['errorDescription'] and res['errorDescription'] == 'Invalid access token':
+    if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
         return redirect('/login')
     else:
         return jsonify(res)
