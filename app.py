@@ -139,7 +139,7 @@ def userInfo():
 @app.route('/bankAccountInfo')
 def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
-    return 200.95
+    return jsonify({'balance': 200.95 })
     # with open('access_token', 'r') as f:
     #     token = f.read()
     #
