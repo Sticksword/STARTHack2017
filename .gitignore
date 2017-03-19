@@ -1,4 +1,5 @@
 env
 .DS_Store
 node_modules
-email.py
+test-email.py
+test-email.pyc

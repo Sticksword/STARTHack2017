@@ -10,6 +10,7 @@ import random
 
 from flask import Flask, g, url_for, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
+from test-email import send_email
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
@@ -192,7 +193,7 @@ def userInfo():
 @crossdomain(origin='*')
 def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
-    return jsonify({'balance': 800.95 })
+    return jsonify({'balance': 1201.95 })
     # with open('access_token', 'r') as f:
     #     token = f.read()
     #
@@ -285,7 +286,7 @@ def destinations():
       {
         'id': 'barcelona',
         'name': 'Barcelona',
-        'total_expense': 100 + 176 * duration
+        'total_expense': 50 + 176 * duration
       }
     )
     loc.append(
@@ -319,6 +320,7 @@ def planItinerary():
             'Other': 19 * duration
         }
 
+    send_email()
     return jsonify(info)
 
 
