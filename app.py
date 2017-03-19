@@ -10,7 +10,7 @@ import random
 
 from flask import Flask, g, url_for, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
-from test-email import send_email
+from test_email import send_email
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
