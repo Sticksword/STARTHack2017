@@ -264,7 +264,7 @@ def destinations():
       {
         'id': 'london',
         'name': 'London',
-        'total_expense': 300 + 176 * duration
+        'total_expense': 980
       }
     )
     loc.append(

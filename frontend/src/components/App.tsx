@@ -37,6 +37,7 @@ export default class Table extends React.Component<Props, State> {
           <main>
             {this.props.children}
           </main>
+          <footer>Partner of Deutsche Bank, Yelp &amp; Amadeus</footer>
         </div>
       </MuiThemeProvider>
     );
