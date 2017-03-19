@@ -135,6 +135,30 @@ def userInfo():
     else:
         return jsonify(res)
 
+
+@app.route('/bankAccountInfo')
+def bankAccountInfo():
+    print('bankAccountInfo')
+    with open('access_token', 'r') as f:
+        token = f.read()
+
+    print(token)
+    url = 'https://simulator-api.db.com/gw/dbapi/v1/cashAccounts'
+
+    headers = {
+        'authorization': 'Bearer ' + token,
+        'cache-control': 'no-cache'
+        }
+
+    response = requests.request('GET', url, headers=headers)
+
+    res = json.loads(response.text)
+    print(res)
+    if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
+        return redirect('/login')
+    else:
+        return jsonify(res)
+
 # Yelp API stuff
 @app.route('/businesses')
 def businesses(persona=None, loc=None):
@@ -230,6 +254,14 @@ def planItinerary():
 
     info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
     info['flights'] = buildFlightExpenses(destination, persona)
+    info['expenses'] = {
+            'Accomodation': 159,
+            'Transport': 75,
+            'Culture': 49,
+            'Dining': 129,
+            'Shopping': 75,
+            'Other': 249
+        }
 
     return jsonify(info)
 
