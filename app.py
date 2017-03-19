@@ -210,35 +210,35 @@ def destinations():
       {
         'id': 'london',
         'name': 'London',
-        'total_expense': '~' + str(300 + 176 * duration)
+        'total_expense': 300 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'paris',
         'name': 'Paris',
-        'total_expense': '~' + str(500 + 176 * duration)
+        'total_expense': 500 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'nyc',
         'name': 'New York City',
-        'total_expense': '~' + str(700 + 176 * duration)
+        'total_expense': 700 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'barcelona',
         'name': 'Barcelona',
-        'total_expense': '~' + str(100 + 176 * duration)
+        'total_expense': 100 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'zurich',
         'name': 'Zurich',
-        'total_expense': '~' + str(600 + 176 * duration)
+        'total_expense': 600 + 176 * duration
       }
     )
 
