@@ -1,0 +1,95 @@
+body {
+  background: #ccc;
+  background-image: url("https://s-media-cache-ak0.pinimg.com/originals/fa/4e/6c/fa4e6c0d93a4f1e8764d5582339b9281.jpg");
+  font-family: 'Roboto', sans-serif;
+}
+.header {
+  padding: 65px 0 40px 0;
+}
+.header__title {
+  color: #fff;
+  text-align: center;
+  font-size: 2.1rem;
+}
+.header__subtitle {
+  color: #fff;
+  text-align: center;
+  font-size: 1.2rem;
+}
+.balance {
+  position: absolute;
+  left: 50%;
+  margin-left: 215px;
+  padding: 10px;
+  top: 0;
+  font-size: 0.92rem;
+  background: rgba(255,255,255,0.267);
+  border-radius: 0 0 4px 4px;
+  -webkit-backdrop-filter: blur(4px);
+  color: #222;
+}
+.moneyhack-icon {
+  width: 120px;
+  height: 120px;
+  margin: 20px 10px;
+}
+.moneyhack-icon:first-child {
+  margin-left: 0;
+}
+.moneyhack-icon:last-child {
+  margin-right: 0;
+}
+.recommendations {
+  position: relative;
+  display: table;
+  width: 96%;
+  margin-left: 2%;
+}
+.recommendations__recommendation {
+  display: table-cell;
+  width: 200px;
+  margin: 10px 0 0 0;
+}
+.recommendations__title {
+  font-size: 0.95em;
+  margin: 0 0 20px 0;
+}
+.recommendations__chip {
+  margin: 5px 5px 10px 0 !important;
+}
+.recommendations__expense {
+  margin-left: 5px;
+  opacity: 0.4;
+}
+.recommendations__credit {
+  margin-top: 15px;
+  font-size: 0.9em;
+  opacity: 0.4;
+}
+.numbers {
+  display: flex;
+  text-align: center;
+}
+.numbers__number {
+  float: left;
+}
+.numbers__number-text {
+  font-size: 1.4em;
+}
+.numbers__number-title {
+  font-size: 0.9em;
+}
+.numbers__sign {
+  margin: 0 10px 0 10px;
+}
+.explorer {
+  max-width: 680px;
+  margin: auto;
+  padding: 5px 10px 15px 10px;
+  background: rgba(255,255,255,0.867);
+  border-radius: 4px;
+  box-shadow: rgba(102,102,102,0.133) 1px 1px 4px 1px;
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/*# sourceMappingURL=app.css.map*/

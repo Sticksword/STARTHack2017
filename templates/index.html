@@ -1,1 +1,16 @@
-login success! you can now visit localhost:5000/transactions or another endpoint for data
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Smart Columbus</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='app.css')}}"></link>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+    <script src="{{url_for('static', filename='common.js')}}"></script>
+  </body>
+</html>

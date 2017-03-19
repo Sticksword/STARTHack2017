@@ -8,12 +8,57 @@ import requests
 import sqlite3
 import random
 
-from flask import Flask, g, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
+from flask import Flask, g, url_for, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
 
+from datetime import timedelta
+from flask import make_response, request, current_app
+from functools import update_wrapper
+
+
+def crossdomain(origin=None, methods=None, headers=None,
+                max_age=21600, attach_to_all=True,
+                automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
 
 # Database config & private methods
 
@@ -55,9 +100,11 @@ def send_js(path):
 
 @app.route('/login')
 def login():
-    return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback', code=302)
+    return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://start-hack.herokuapp.com/callback&redirect_uri=http://start-hack.herokuapp.com/callback', code=302)
+    # return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback', code=302)
 
 @app.route('/callback')
+@crossdomain(origin='*')
 def auth_callback():
     print('callback')
     print(request)
@@ -65,7 +112,8 @@ def auth_callback():
 
     url = 'https://simulator-api.db.com/gw/oidc/token'
 
-    payload = 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=' + code
+    # payload = 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=' + code
+    payload = 'grant_type=authorization_code&redirect_uri=http://start-hack.herokuapp.com/callback&code=' + code
     headers = {
         'authorization': 'Basic ODhkZmE4NWEtZWI4My00M2M1LWE3MzktNDdiYWY4MjM0YzE1OmIwXy1sR1BUd05paFZuTDhjazVyLWpUZnA3V01YY1JZOUtMNW1OT1BBVUNGWkZNNGNVX0tjU3Y1U3JzZ2hKSlVtOTJCd3pRYXpBOGt3SXZqeS04djZn',
         'content-type': 'application/x-www-form-urlencoded',
@@ -137,9 +185,10 @@ def userInfo():
 
 
 @app.route('/bankAccountInfo')
+@crossdomain(origin='*')
 def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
-    return 200.95
+    return jsonify({'balance': 800.95 })
     # with open('access_token', 'r') as f:
     #     token = f.read()
     #
@@ -200,9 +249,10 @@ def businesses(loc=None, persona=None):
 # Trip generation logic
 
 @app.route('/destinations')
+@crossdomain(origin='*')
 def destinations():
     persona = request.args.get('persona')
-    duration = request.args.get('duration')
+    duration = int(request.args.get('duration'))
     month = request.args.get('month')
 
     loc = []
@@ -210,41 +260,42 @@ def destinations():
       {
         'id': 'london',
         'name': 'London',
-        'total_expense': 800
+        'total_expense': 300 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'paris',
         'name': 'Paris',
-        'total_expense': 1000
+        'total_expense': 500 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'nyc',
         'name': 'New York City',
-        'total_expense': 1200
+        'total_expense': 700 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'barcelona',
         'name': 'Barcelona',
-        'total_expense': 500
+        'total_expense': 100 + 176 * duration
       }
     )
     loc.append(
       {
         'id': 'zurich',
         'name': 'Zurich',
-        'total_expense': 1100
+        'total_expense': 600 + 176 * duration
       }
     )
 
     return jsonify(loc)
 
 @app.route('/details')
+@crossdomain(origin='*')
 def planItinerary():
     destination = request.args.get('destination')
     persona = request.args.get('persona')
@@ -256,12 +307,12 @@ def planItinerary():
     info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
     info['flights'] = buildFlightExpenses(destination, persona, month)
     info['expenses'] = {
-            'Accomodation': 159 * duration,
-            'Transport': 75 * duration,
-            'Culture': 49 * duration,
-            'Dining': 129 * duration,
-            'Shopping': 75 * duration,
-            'Other': 249 * duration
+            'Accomodation': 69 * duration,
+            'Transport': 25 * duration,
+            'Culture': 19 * duration,
+            'Dining': 29 * duration,
+            'Shopping': 15 * duration,
+            'Other': 19 * duration
         }
 
     return jsonify(info)
@@ -323,8 +374,8 @@ def flights(destination, persona, month):
     elif destination == 'ZURICH':
         dest = 'ZRH'
 
-    dep_date = '2017-' + month + '-01'
-    ret_date = '2017-' + month + '-07'
+    dep_date = '2017-' + '05' + '-01'
+    ret_date = '2017-' + '05' + '-07'
     num_results = '3'
 
     url = 'http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search'
@@ -402,3 +453,6 @@ if __name__ == '__main__':
     print('Starting app on port %d' % port)
     init()
     app.run(debug=True, port=port, host='0.0.0.0')
+    url_for('static', filename='app.js')
+    url_for('static', filename='common.js')
+    url_for('static', filename='app.css')
