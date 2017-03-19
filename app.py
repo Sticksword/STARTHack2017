@@ -137,27 +137,28 @@ def userInfo():
 
 
 @app.route('/bankAccountInfo')
-def bankAccountInfo():
+def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
-    with open('access_token', 'r') as f:
-        token = f.read()
-
-    print(token)
-    url = 'https://simulator-api.db.com/gw/dbapi/v1/cashAccounts'
-
-    headers = {
-        'authorization': 'Bearer ' + token,
-        'cache-control': 'no-cache'
-        }
-
-    response = requests.request('GET', url, headers=headers)
-
-    res = json.loads(response.text)
-    print(res)
-    if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
-        return redirect('/login')
-    else:
-        return jsonify(res)
+    return 200.95
+    # with open('access_token', 'r') as f:
+    #     token = f.read()
+    #
+    # print(token)
+    # url = 'https://simulator-api.db.com/gw/dbapi/v1/cashAccounts'
+    #
+    # headers = {
+    #     'authorization': 'Bearer ' + token,
+    #     'cache-control': 'no-cache'
+    #     }
+    #
+    # response = requests.request('GET', url, headers=headers)
+    #
+    # res = json.loads(response.text)
+    # print(res)
+    # if 'errorDescription' in res and res['errorDescription'] == 'Invalid access token':
+    #     return redirect('/login')
+    # else:
+    #     return jsonify(res)
 
 # Yelp API stuff
 @app.route('/businesses')
@@ -253,7 +254,7 @@ def planItinerary():
     info = { 'name': destination }
 
     info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
-    info['flights'] = buildFlightExpenses(destination, persona)
+    info['flights'] = buildFlightExpenses(destination, persona, month)
     info['expenses'] = {
             'Accomodation': 159 * duration,
             'Transport': 75 * duration,
@@ -284,8 +285,8 @@ def buildBusinessExpenses(destination, persona):
     return potential_business_expenses
 
 
-def buildFlightExpenses(destination, persona):
-    possible_flights = json.loads(flights(destination, persona))
+def buildFlightExpenses(destination, persona, month):
+    possible_flights = json.loads(flights(destination, persona, month))
     group = 'economy'
     if persona == 'student':
         group = 'economy'
@@ -309,21 +310,21 @@ def buildFlightExpenses(destination, persona):
 # Amadeus API stuff
 
 @app.route('/flights')
-def flights(destination, persona):
+def flights(destination, persona, month):
     orig = 'BER'
     dest = 'LON'
     destination = dest.upper()
     if destination == 'PARIS':
         dest = 'CDG'
-    elif destionation == 'BARCELONA':
+    elif destination == 'BARCELONA':
         dest = 'BCN'
-    elif destionation == 'NYC':
+    elif destination == 'NYC':
         dest = 'JFK'
     elif destination == 'ZURICH':
         dest = 'ZRH'
-        
-    dep_date = '2017-05-01'
-    ret_date = '2017-05-07'
+
+    dep_date = '2017-' + month + '-01'
+    ret_date = '2017-' + month + '-07'
     num_results = '3'
 
     url = 'http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search'
