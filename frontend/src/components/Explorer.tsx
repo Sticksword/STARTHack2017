@@ -22,7 +22,8 @@ interface State {
   persona?: string,
   duration: number,
   month: number,
-  destination?: Destination
+  destination?: Destination,
+  suggestDestination: boolean
 }
 
 export default class Explorer extends React.Component<Props, State> {
@@ -33,7 +34,8 @@ export default class Explorer extends React.Component<Props, State> {
       stepIndex: 0,
       persona: 'student', // TODO: From Auth
       duration: 5,
-      month: 0
+      month: 0,
+      suggestDestination: false
     }
   }
   handleNext = () => {
@@ -49,53 +51,82 @@ export default class Explorer extends React.Component<Props, State> {
       this.setState({ stepIndex: stepIndex - 1 });
     }
   }
-  handleProfileSelection = (persona: string, duration: number, month: number) => {
-    this.setState({ persona, duration, month, stepIndex: 1 })
+  handleProfileSelection = (destination: Destination, duration: number, month: number) => {
+    this.setState({ destination, duration, month, stepIndex: 1, suggestDestination: !destination })
   }
   handleDestinationSelection = (destination: Destination) => {
     this.setState({ destination, stepIndex: 2 });
   }
   render() {
-    const { finished, stepIndex } = this.state;
+    const { stepIndex } = this.state;
     return (
       <div className="explorer">
-        <Stepper activeStep={stepIndex} orientation="vertical">
-          <Step>
-            <StepButton onClick={() => this.setState({ stepIndex: 0 }) }>
-              Specify your profile
-            </StepButton>
-            <StepContent>
-              <ProfileForm
-                persona={this.state.persona}
-                duration={this.state.duration}
-                month={this.state.month}
-                onSelect={this.handleProfileSelection} />
-            </StepContent>
-          </Step>
-          <Step>
-            <StepButton onClick={() => this.setState({ stepIndex: 1 }) }>
-              Pick a destination
-            </StepButton>
-            <StepContent>
-              <DestinationPicker
-                persona={this.state.persona}
-                duration={this.state.duration}
-                month={this.state.month}
-                onSelectDestination={this.handleDestinationSelection} />
-            </StepContent>
-          </Step>
-          <Step>
-            <StepButton>Learn more about the journey</StepButton>
-            <StepContent>
-              <Info
-                persona={this.state.persona}
-                duration={this.state.duration}
-                month={this.state.month}
-                destination={this.state.destination}  />
-            </StepContent>
-          </Step>
+        <Stepper activeStep={stepIndex} orientation="horizontal">
+          {this.renderSteps()}
         </Stepper>
+        {this.state.stepIndex == 0 ? (
+          <ProfileForm
+            persona={this.state.persona}
+            duration={this.state.duration}
+            month={this.state.month}
+            onSelect={this.handleProfileSelection} />
+        ) : null}
+        {(this.state.suggestDestination && this.state.stepIndex == 1) ? (
+          <DestinationPicker
+            persona={this.state.persona}
+            duration={this.state.duration}
+            month={this.state.month}
+            onSelectDestination={this.handleDestinationSelection} />
+        ) : null}
+        {(this.state.suggestDestination && this.state.stepIndex == 2) || (!this.state.suggestDestination && this.state.stepIndex == 1) ? (
+          <Info
+            persona={this.state.persona}
+            duration={this.state.duration}
+            month={this.state.month}
+            destination={this.state.destination}
+            onIncreaseDays={ () => this.setState({ duration: this.state.duration+1 }) }
+            onDecreaseDays={ () => this.setState({ duration: this.state.duration-1 }) } />
+        ) : null}
       </div>
+    );
+  }
+  renderSteps = () => {
+    return [
+      this.renderProfileStep(),
+      this.state.suggestDestination ? this.renderSuggestionsStep() : null,
+      this.renderInfoStep()
+    ].filter(_ => !!_)
+  }
+  renderProfileStep = () => {
+    let daysText = (this.state.stepIndex > 0) ? `${this.state.duration} day ` : ''
+    return (
+      <Step key="a">
+        <StepButton onClick={() => this.setState({ stepIndex: 0 }) }>
+          {(this.state.destination && !this.state.suggestDestination)
+            ? `Your ${daysText}journey to ${this.state.destination.name}`
+            : `Your ${daysText}journey`}
+        </StepButton>
+      </Step>
+    );
+  }
+  renderSuggestionsStep = () => {
+    return (
+      <Step key="b">
+        <StepButton onClick={() => this.setState({ stepIndex: 1 }) }>
+          {(this.state.destination)
+            ? `to ${this.state.destination.name}`
+            : 'to the perfect destination'}
+        </StepButton>
+      </Step>
+    );
+  }
+  renderInfoStep = () => {
+    return (
+      <Step key="c">
+        <StepButton>
+          with the actual math for it
+        </StepButton>
+      </Step>
     );
   }
 }

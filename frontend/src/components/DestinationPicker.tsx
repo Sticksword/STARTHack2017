@@ -1,29 +1,27 @@
 import * as React from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
-import MenuItem from 'material-ui/MenuItem';
 import Chip from 'material-ui/Chip';
 import { Destination, getDestinations } from '../data/api';
 
 import '../styles/recommendations.styl'
 
-function buildDataSource(destinations: Destination[], onSelect: (destination: Destination) => void){
-  return destinations.map(destination => ({
-    id: destination.id,
-    text: destination.name,
-    value: (
-      <MenuItem
-        primaryText={destination.name}
-        secondaryText={`~ ${destination.total_expense}€`}
-        onClick={() => onSelect(destination) } />
-    )
-  }));
-}
-
 function buildRecommendations(destinations: Destination[], persona: string) {
   return [
-    { title: 'Under 300€', destinations: destinations },
-    { title: 'Under 500€', destinations: destinations },
-    { title: 'Under 1000€', destinations: destinations }
+    {
+      title: 'Explore something new',
+      needs_credit: false,
+      destinations: destinations.filter(_ => _.id == 'paris' || _.id == 'bercelona')
+    },
+    {
+      title: 'It\'s been a couple of years…',
+      needs_credit: false,
+      destinations: destinations.filter(_ => _.id == 'london' || _.id == 'zurich')
+    },
+    {
+      title: 'Or with a small credit:',
+      needs_credit: true,
+      destinations: destinations.filter(_ => _.id == 'nyc')
+    }
   ]
 }
 
@@ -36,10 +34,10 @@ interface Props {
 }
 
 interface State {
-  dataSource?: object[],
   recommendations?: {
     title: string,
     destinations: Destination[]
+    needs_credit: boolean
   }[]
 }
 
@@ -53,13 +51,12 @@ export default class DestinationPicker extends React.Component<Props, State> {
     let { persona, duration, month } = this.props;
     console.log(persona, duration, month);
     if (!persona || !duration){
-      this.setState({ dataSource: null, recommendations: null });
+      this.setState({ recommendations: null });
       return;
     }
     getDestinations(this.props.persona, this.props.duration, this.props.month).then((destinations) => {
       console.log('Update destinations:', destinations);
       this.setState({
-        dataSource: buildDataSource(destinations, this.props.onSelectDestination),
         recommendations: buildRecommendations(destinations, this.props.persona)
       })
     }, console.error);
@@ -73,35 +70,32 @@ export default class DestinationPicker extends React.Component<Props, State> {
     }
   }
   render(){
-    if (!this.state.dataSource || !this.state.recommendations){
+    if (!this.state.recommendations){
       return (
         <div>Loading...</div>
       )
     }
     return (
       <div>
-        <div>
-          <AutoComplete
-            floatingLabelText="Enter your destination"
-            hintText="Somewhere over the rainbow..."
-            dataSource={this.state.dataSource}
-            filter={AutoComplete.fuzzyFilter} />
-          <br />
-        </div>
         <br />
-        Recommended for you:
         <div className="recommendations">
           {this.state.recommendations.map((recommendation, idx) => (
             <div key={idx} className="recommendations__recommendation">
-              <span>{recommendation.title}</span>
+              <div className="recommendations__title">{recommendation.title}</div>
               <span className="recommendations__chips">
                 {recommendation.destinations.map(destination => (
                   <Chip key={destination.id} className="recommendations__chip"
                     onTouchTap={() => this.props.onSelectDestination(destination) }>
-                    {destination.name}
+                    <span>{destination.name}</span>
+                    <span className="recommendations__expense">~{destination.total_expense}€</span>
                   </Chip>
                 ))}
               </span>
+              {recommendation.needs_credit ? (
+                <div className="recommendations__credit">
+                  Don't overdraw your credit card,<br /><u>get a 200€ credit</u> instead
+                </div>
+              ):null}
             </div>
           ))}
         </div>
