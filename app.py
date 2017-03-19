@@ -139,7 +139,7 @@ def userInfo():
 @app.route('/bankAccountInfo')
 def bankAccountInfo(): # 100.95
     print('bankAccountInfo')
-    return jsonify({'balance': 200.95 })
+    return jsonify({'balance': 400.95 })
     # with open('access_token', 'r') as f:
     #     token = f.read()
     #
@@ -202,7 +202,7 @@ def businesses(loc=None, persona=None):
 @app.route('/destinations')
 def destinations():
     persona = request.args.get('persona')
-    duration = request.args.get('duration')
+    duration = int(request.args.get('duration'))
     month = request.args.get('month')
 
     loc = []
@@ -210,35 +210,35 @@ def destinations():
       {
         'id': 'london',
         'name': 'London',
-        'total_expense': 800
+        'total_expense': '~' + str(300 + 176 * duration)
       }
     )
     loc.append(
       {
         'id': 'paris',
         'name': 'Paris',
-        'total_expense': 1000
+        'total_expense': '~' + str(500 + 176 * duration)
       }
     )
     loc.append(
       {
         'id': 'nyc',
         'name': 'New York City',
-        'total_expense': 1200
+        'total_expense': '~' + str(700 + 176 * duration)
       }
     )
     loc.append(
       {
         'id': 'barcelona',
         'name': 'Barcelona',
-        'total_expense': 500
+        'total_expense': '~' + str(100 + 176 * duration)
       }
     )
     loc.append(
       {
         'id': 'zurich',
         'name': 'Zurich',
-        'total_expense': 1100
+        'total_expense': '~' + str(600 + 176 * duration)
       }
     )
 
@@ -256,12 +256,12 @@ def planItinerary():
     info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
     info['flights'] = buildFlightExpenses(destination, persona, month)
     info['expenses'] = {
-            'Accomodation': 159 * duration,
-            'Transport': 75 * duration,
-            'Culture': 49 * duration,
-            'Dining': 129 * duration,
-            'Shopping': 75 * duration,
-            'Other': 249 * duration
+            'Accomodation': 69 * duration,
+            'Transport': 25 * duration,
+            'Culture': 19 * duration,
+            'Dining': 29 * duration,
+            'Shopping': 15 * duration,
+            'Other': 19 * duration
         }
 
     return jsonify(info)
