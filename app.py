@@ -405,3 +405,4 @@ if __name__ == '__main__':
     url_for('static', filename='app.js')
     url_for('static', filename='common.js')
     url_for('static', filename='app.css')
+    url_for('static', filename='background.jpg')
