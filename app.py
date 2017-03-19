@@ -8,12 +8,11 @@ import requests
 import sqlite3
 import random
 
-from flask import Flask, g, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
+from flask import Flask, g, url_for, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
-
 
 # Database config & private methods
 
@@ -403,3 +402,6 @@ if __name__ == '__main__':
     print('Starting app on port %d' % port)
     init()
     app.run(debug=True, port=port, host='0.0.0.0')
+    url_for('static', filename='app.js')
+    url_for('static', filename='common.js')
+    url_for('static', filename='app.css')
