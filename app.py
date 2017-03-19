@@ -244,7 +244,8 @@ def buildBusinessExpenses(destination, persona):
         potential_business_expenses.append({
             'category': biz['categories'][0]['title'],
             'price': cost,
-            'business_name': biz['name']
+            'business_name': biz['name'],
+            'image_url': biz['image_url']
         })
         # print(biz['name'])
 
