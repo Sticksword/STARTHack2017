@@ -76,7 +76,7 @@ export default class DestinationPicker extends React.Component<Props, State> {
       )
     }
     return (
-      <div>
+      <div style={{marginBottom:40}}>
         <br />
         <div className="recommendations">
           {this.state.recommendations.map((recommendation, idx) => (

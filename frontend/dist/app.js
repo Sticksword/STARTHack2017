@@ -45245,7 +45245,7 @@ var DestinationPicker = (function (_super) {
         if (!this.state.recommendations) {
             return (React.createElement("div", null, "Loading..."));
         }
-        return (React.createElement("div", null,
+        return (React.createElement("div", { style: { marginBottom: 40 } },
             React.createElement("br", null),
             React.createElement("div", { className: "recommendations" }, this.state.recommendations.map(function (recommendation, idx) { return (React.createElement("div", { key: idx, className: "recommendations__recommendation" },
                 React.createElement("div", { className: "recommendations__title" }, recommendation.title),
@@ -45334,9 +45334,9 @@ var Info = (function (_super) {
             return cost;
         })();
         var totalCost = flightCost + otherCost;
-        return (React.createElement("div", { style: { marginTop: 10, position: 'relative' } },
-            React.createElement("div", { className: "numbers" },
-                React.createElement("div", { style: { marginLeft: 110, marginRight: 25, marginTop: 8, opacity: 0.5 } }, "Estimated cost:"),
+        return (React.createElement("div", { style: { marginTop: 10, marginBottom: 10, position: 'relative' } },
+            React.createElement("div", { className: "numbers", style: { marginBottom: 15 } },
+                React.createElement("div", { style: { marginLeft: 10, marginRight: 25, marginTop: 8, opacity: 0.5 } }, "Estimated cost:"),
                 React.createElement("div", { className: "numbers__number" },
                     React.createElement("div", { className: "numbers__number-text" },
                         Math.round(flightCost),
@@ -45360,11 +45360,13 @@ var Info = (function (_super) {
                 React.createElement(Tabs_1.Tab, { label: "Detailed expenses" },
                     React.createElement(Chart_1.default, { expenses: this.state.details.expenses })),
                 React.createElement(Tabs_1.Tab, { label: "Recommendations" },
-                    React.createElement("p", null, "Spend your money like the locals do!"),
+                    React.createElement("p", null, "Stay within budget, spend your money like the locals do:"),
                     React.createElement(List_1.List, null, this.state.details.top_rated_local_busineses.map(function (business) { return (React.createElement(List_1.ListItem, { key: business.business_name, primaryText: business.business_name, secondaryText: business.category + ", usually for " + business.price + "\u20AC", leftAvatar: React.createElement(Avatar_1.default, { src: business.image_url }) })); }))),
                 React.createElement(Tabs_1.Tab, { label: "Money Hacks" },
+                    React.createElement("p", null, "Clever ways to save some money:"),
                     React.createElement("div", null, [1, 2, 3].map(function (i) { return (React.createElement("img", { key: i, src: "./images/moneyhack" + i + ".png", className: "moneyhack-icon" })); }))),
                 React.createElement(Tabs_1.Tab, { label: "Treat Yourself" },
+                    React.createElement("p", null, "It feels good to treat yourself from time to time:"),
                     React.createElement("div", null, [1, 2, 3].map(function (i) { return (React.createElement("img", { key: i, src: "./images/treatyourself" + i + ".png", className: "moneyhack-icon" })); }))))));
     };
     return Info;
