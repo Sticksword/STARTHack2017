@@ -67,8 +67,8 @@ export default class Info extends React.Component<Props, State> {
     let totalCost = flightCost + otherCost;
     return (
       <div style={{marginTop: 10, marginBottom: 10, position: 'relative'}}>
-        <div className="numbers">
-          <div style={{marginLeft: 110, marginRight:25, marginTop: 8, opacity: 0.5}}>
+        <div className="numbers" style={{marginBottom: 15}}>
+          <div style={{marginLeft: 10, marginRight:25, marginTop: 8, opacity: 0.5}}>
             Estimated cost:
           </div>
           <div className="numbers__number">
@@ -93,7 +93,7 @@ export default class Info extends React.Component<Props, State> {
             <Chart expenses={this.state.details.expenses} />
           </Tab>
           <Tab label="Recommendations" >
-            <p>Spend your money like the locals do!</p>
+            <p>Stay within budget, spend your money like the locals do:</p>
             <List>
               {
                 this.state.details.top_rated_local_busineses.map(business => (
@@ -107,6 +107,7 @@ export default class Info extends React.Component<Props, State> {
             </List>
           </Tab>
           <Tab label="Money Hacks" >
+            <p>Clever ways to save some money:</p>
             <div>
               {[1,2,3].map(i => (
                 <img key={i} src={`./images/moneyhack${i}.png`} className="moneyhack-icon" />
@@ -114,6 +115,7 @@ export default class Info extends React.Component<Props, State> {
             </div>
           </Tab>
           <Tab label="Treat Yourself">
+            <p>It feels good to treat yourself from time to time:</p>
             <div>
               {[1,2,3].map(i => (
                 <img key={i} src={`./images/treatyourself${i}.png`} className="moneyhack-icon" />
