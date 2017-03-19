@@ -65,7 +65,8 @@ def auth_callback():
 
     url = 'https://simulator-api.db.com/gw/oidc/token'
 
-    payload = 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=' + code
+    # payload = 'grant_type=authorization_code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fcallback&code=' + code
+    payload = 'grant_type=authorization_code&redirect_uri=http://start-hack.herokuapp.com/callback&code=' + code
     headers = {
         'authorization': 'Basic ODhkZmE4NWEtZWI4My00M2M1LWE3MzktNDdiYWY4MjM0YzE1OmIwXy1sR1BUd05paFZuTDhjazVyLWpUZnA3V01YY1JZOUtMNW1OT1BBVUNGWkZNNGNVX0tjU3Y1U3JzZ2hKSlVtOTJCd3pRYXpBOGt3SXZqeS04djZn',
         'content-type': 'application/x-www-form-urlencoded',
