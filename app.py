@@ -323,8 +323,8 @@ def flights(destination, persona, month):
     elif destination == 'ZURICH':
         dest = 'ZRH'
 
-    dep_date = '2017-' + month + '-01'
-    ret_date = '2017-' + month + '-07'
+    dep_date = '2017-' + '05' + '-01'
+    ret_date = '2017-' + '05' + '-07'
     num_results = '3'
 
     url = 'http://api.sandbox.amadeus.com/v1.2/flights/low-fare-search'
