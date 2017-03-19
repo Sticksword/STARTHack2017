@@ -127,7 +127,7 @@ def auth_callback():
     # print(res)
     # print(res['access_token'])
     if not 'access_token' in res:
-        redirect('/')
+        redirect('http://start-hack.herokuapp.com/')
     print('access_token' in res)
 
     with open('access_token', 'w') as f:
