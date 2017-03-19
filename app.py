@@ -54,7 +54,8 @@ def send_js(path):
 
 @app.route('/login')
 def login():
-    return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback', code=302)
+    return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://start-hack.herokuapp.com/callback&redirect_uri=http://start-hack.herokuapp.com/callback', code=302)
+    # return redirect('https://simulator-api.db.com/gw/oidc/authorize?response_type=code&client_id=88dfa85a-eb83-43c5-a739-47baf8234c15&state=http://localhost:5000/callback&redirect_uri=http://localhost:5000/callback', code=302)
 
 @app.route('/callback')
 def auth_callback():
