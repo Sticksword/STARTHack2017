@@ -10,17 +10,17 @@ function buildRecommendations(destinations: Destination[], persona: string) {
     {
       title: 'Explore something new',
       needs_credit: false,
-      destinations: destinations.filter(_ => _.total_expense <= 700)
+      destinations: destinations.filter(_ => _.id == 'paris' || _.id == 'bercelona')
     },
     {
       title: 'It\'s been a couple of years…',
       needs_credit: false,
-      destinations: destinations.filter(_ => _.total_expense > 700 && _.total_expense <= 1000)
+      destinations: destinations.filter(_ => _.id == 'london' || _.id == 'zurich')
     },
     {
-      title: 'Do more with a 200€ credit',
+      title: 'Or with a small credit:',
       needs_credit: true,
-      destinations: destinations.filter(_ => _.total_expense > 1000)
+      destinations: destinations.filter(_ => _.id == 'nyc')
     }
   ]
 }
@@ -91,6 +91,11 @@ export default class DestinationPicker extends React.Component<Props, State> {
                   </Chip>
                 ))}
               </span>
+              {recommendation.needs_credit ? (
+                <div className="recommendations__credit">
+                  Don't overdraw your credit card,<br /><u>get a 200€ credit</u> instead
+                </div>
+              ):null}
             </div>
           ))}
         </div>

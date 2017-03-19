@@ -23,6 +23,9 @@ function createData(expenses: {[key: string]: number}){
         legend: {
             display: false,
         },
+        gridLines: {
+          display: false
+        },
         scales: {
             yAxes: [{
                 ticks: {

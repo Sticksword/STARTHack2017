@@ -30,8 +30,8 @@ export default class Info extends React.Component<Props, State> {
   }
   updateDetails(){
     let { destination, persona, duration, month } = this.props;
+    this.setState({ details: null });
     if (!destination || !persona || !duration){
-      this.setState({ details: null });
       return;
     }
     getDestaintionDetails(destination, persona, duration, month).then((details) => {
@@ -56,29 +56,37 @@ export default class Info extends React.Component<Props, State> {
         <div>Loading...</div>
       )
     }
-    let flightCost  = this.state.details.flights[0].total_price;
+    let flightCost = parseInt(this.state.details.flights[0].total_price);
+    let otherCost = (() => {
+      var cost = 0;
+      for (var p in this.state.details.expenses){
+        cost += this.state.details.expenses[p]
+      }
+      return cost;
+    })();
+    let totalCost = flightCost + otherCost;
     return (
-      <div style={{marginTop: 10}}>
+      <div style={{marginTop: 10, marginBottom: 10, position: 'relative'}}>
         <div className="numbers">
-          <div style={{marginLeft: 5, marginRight:10, marginTop: 8}}>
-            Approx.<br />cost:
+          <div style={{marginLeft: 110, marginRight:25, marginTop: 8, opacity: 0.5}}>
+            Estimated cost:
           </div>
           <div className="numbers__number">
-            <div className="numbers__number-text">{flightCost}€</div>
+            <div className="numbers__number-text">{Math.round(flightCost)}€</div>
             <div className="numbers__number-title">getting there</div>
           </div>
           <div className="numbers__sign">+</div>
           <div className="numbers__number">
-            <div className="numbers__number-text">{Math.round(this.props.destination.total_expense - flightCost)}€</div>
+            <div className="numbers__number-text">{Math.round(otherCost)}€</div>
             <div className="numbers__number-title">being there</div>
           </div>
           <div className="numbers__sign">=</div>
           <div className="numbers__number">
-            <div className="numbers__number-text">{this.props.destination.total_expense}€</div>
+            <div className="numbers__number-text">{Math.round(totalCost)}€</div>
           </div>
         </div>
-        <div style={{position: 'absolute', right: 100, top: 50}} onClick={this.props.onIncreaseDays}>+1 day</div>
-        <div style={{position: 'absolute', right: 60, top: 50}} onClick={this.props.onDecreaseDays}>-1 day</div>
+        <div style={{position: 'absolute', right: 70, top: 10, fontSize: 0.9 }} onClick={this.props.onIncreaseDays}>+1 day</div>
+        <div style={{position: 'absolute', right: 20, top: 10, fontSize: 0.9 }} onClick={this.props.onDecreaseDays}>-1 day</div>
         <br />
         <Tabs>
           <Tab label="Detailed expenses" >
@@ -90,6 +98,7 @@ export default class Info extends React.Component<Props, State> {
               {
                 this.state.details.top_rated_local_busineses.map(business => (
                   <ListItem
+                    key={business.business_name}
                     primaryText={business.business_name}
                     secondaryText={`${business.category}, usually for ${business.price}€`}
                     leftAvatar={<Avatar src={business.image_url} />} />

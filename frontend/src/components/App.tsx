@@ -30,7 +30,9 @@ export default class Table extends React.Component<Props, State> {
           <header className="header">
             <div className="header__title">Smart Columbus</div>
             <div className="header__subtitle">Only real data shows you the whole picture</div>
-            <div>Balance ${this.state.balance}</div>
+            {this.state.balance > 0 ? (
+              <div className="balance">Balance: {this.state.balance}€</div>
+            ):null}
           </header>
           <main>
             {this.props.children}

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/assets";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 680);
@@ -7240,7 +7240,7 @@ module.exports = invariant;
 
 var _assign = __webpack_require__(41);
 
-var ReactChildren = __webpack_require__(137);
+var ReactChildren = __webpack_require__(138);
 var ReactComponent = __webpack_require__(80);
 var ReactPureComponent = __webpack_require__(262);
 var ReactClass = __webpack_require__(259);
@@ -8166,7 +8166,7 @@ module.exports = ReactInstanceMap;
 /***/ (function(module, exports, __webpack_require__) {
 
 var store      = __webpack_require__(153)('wks')
-  , uid        = __webpack_require__(132)
+  , uid        = __webpack_require__(133)
   , Symbol     = __webpack_require__(51).Symbol
   , USE_SYMBOL = typeof Symbol == 'function';
 
@@ -13270,7 +13270,7 @@ var _warning2 = _interopRequireDefault(_warning);
 
 var _PathUtils = __webpack_require__(56);
 
-var _Actions = __webpack_require__(134);
+var _Actions = __webpack_require__(135);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16286,6 +16286,52 @@ module.exports = ReactPropTypesSecret;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var fetch = __webpack_require__(477);
+exports.getDestinations = function (persona, duration, month) {
+    var url = "https://start-hack.herokuapp.com/destinations?persona=" + persona + "&duration=" + duration + "&month=" + month;
+    console.log('Get destinations', url);
+    return fetch(url).then(function (response) {
+        return response.json().then(function (json) {
+            return json.map(function (obj) { return ({
+                id: obj.id,
+                name: obj.name,
+                total_expense: obj.total_expense
+            }); });
+        });
+    }, function (error) {
+        console.error(error, error.stack);
+        return [];
+    });
+};
+exports.getDestaintionDetails = function (destination, persona, duration, month) {
+    var url = "https://start-hack.herokuapp.com/details?destination=" + destination.id + "&persona=" + persona + "&duration=" + duration + "&month=" + month;
+    console.log('Get details', url);
+    return fetch(url).then(function (response) {
+        return response.json();
+    }, function (error) {
+        console.error(error, error.stack);
+        return null;
+    });
+};
+exports.getBankAccountInfo = function () {
+    var url = "https://start-hack.herokuapp.com/bankAccountInfo";
+    console.log('Get bank account info', url);
+    return fetch(url).then(function (response) {
+        return response.json().then(function (json) { return json.balance; });
+    }, function (error) {
+        console.error(error, error.stack);
+        return null;
+    });
+};
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -16301,13 +16347,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _Paper2.default;
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports) {
 
 var id = 0
@@ -16317,7 +16363,7 @@ module.exports = function(key){
 };
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16343,7 +16389,7 @@ exports.default = function (property, value) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16371,7 +16417,7 @@ var REPLACE = exports.REPLACE = 'REPLACE';
 var POP = exports.POP = 'POP';
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16426,7 +16472,7 @@ var isExtraneousPopstateEvent = exports.isExtraneousPopstateEvent = function isE
 };
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16490,7 +16536,7 @@ var KeyEscapeUtils = {
 module.exports = KeyEscapeUtils;
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16510,7 +16556,7 @@ var PooledClass = __webpack_require__(258);
 var ReactElement = __webpack_require__(27);
 
 var emptyFunction = __webpack_require__(49);
-var traverseAllChildren = __webpack_require__(138);
+var traverseAllChildren = __webpack_require__(139);
 
 var twoArgumentPooler = PooledClass.twoArgumentPooler;
 var fourArgumentPooler = PooledClass.fourArgumentPooler;
@@ -16686,7 +16732,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16709,7 +16755,7 @@ var REACT_ELEMENT_TYPE = __webpack_require__(127);
 
 var getIteratorFn = __webpack_require__(84);
 var invariant = __webpack_require__(29);
-var KeyEscapeUtils = __webpack_require__(136);
+var KeyEscapeUtils = __webpack_require__(137);
 var warning = __webpack_require__(19);
 
 var SEPARATOR = '.';
@@ -16866,42 +16912,6 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var fetch = __webpack_require__(477);
-exports.getDestinations = function (persona, duration, month) {
-    var url = "https://start-hack.herokuapp.com/destinations?persona=" + persona + "&duration=" + duration + "&month=" + month;
-    console.log('Get destinations', url);
-    return fetch(url).then(function (response) {
-        return response.json().then(function (json) {
-            return json.map(function (obj) { return ({
-                id: obj.id,
-                name: obj.name,
-                total_expense: obj.total_expense
-            }); });
-        });
-    }, function (error) {
-        console.error(error, error.stack);
-        return [];
-    });
-};
-exports.getDestaintionDetails = function (destination, persona, duration, month) {
-    var url = "https://start-hack.herokuapp.com/details?destination=" + destination.id + "&persona=" + persona + "&duration=" + duration + "&month=" + month;
-    console.log('Get details', url);
-    return fetch(url).then(function (response) {
-        return response.json();
-    }, function (error) {
-        console.error(error, error.stack);
-        return null;
-    });
-};
-
 
 /***/ }),
 /* 140 */
@@ -17789,7 +17799,7 @@ var _propTypes = __webpack_require__(53);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _Paper = __webpack_require__(130);
+var _Paper = __webpack_require__(131);
 
 var _Paper2 = _interopRequireDefault(_Paper);
 
@@ -18375,7 +18385,7 @@ module.exports = function(it, tag, stat){
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(153)('keys')
-  , uid    = __webpack_require__(132);
+  , uid    = __webpack_require__(133);
 module.exports = function(key){
   return shared[key] || (shared[key] = uid(key));
 };
@@ -29419,7 +29429,7 @@ exports.go = exports.replaceLocation = exports.pushLocation = exports.startListe
 
 var _LocationUtils = __webpack_require__(96);
 
-var _DOMUtils = __webpack_require__(135);
+var _DOMUtils = __webpack_require__(136);
 
 var _DOMStateStorage = __webpack_require__(411);
 
@@ -29539,7 +29549,7 @@ var _runTransitionHook = __webpack_require__(257);
 
 var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-var _Actions = __webpack_require__(134);
+var _Actions = __webpack_require__(135);
 
 var _LocationUtils = __webpack_require__(96);
 
@@ -43277,7 +43287,7 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 /* 389 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE            = __webpack_require__(131)
+var pIE            = __webpack_require__(132)
   , createDesc     = __webpack_require__(99)
   , toIObject      = __webpack_require__(61)
   , toPrimitive    = __webpack_require__(155)
@@ -44812,18 +44822,31 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(2);
 var MuiThemeProvider_1 = __webpack_require__(625);
+var api_1 = __webpack_require__(130);
 __webpack_require__(426);
 var Table = (function (_super) {
     __extends(Table, _super);
     function Table(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            balance: 0
+        };
+        return _this;
     }
+    Table.prototype.componentWillMount = function () {
+        var _this = this;
+        api_1.getBankAccountInfo().then(function (balance) { return _this.setState({ balance: balance }); });
+    };
     Table.prototype.render = function () {
         return (React.createElement(MuiThemeProvider_1.default, null,
             React.createElement("div", null,
                 React.createElement("header", { className: "header" },
                     React.createElement("div", { className: "header__title" }, "Smart Columbus"),
-                    React.createElement("div", { className: "header__subtitle" }, "Only real data shows you the whole picture")),
+                    React.createElement("div", { className: "header__subtitle" }, "Only real data shows you the whole picture"),
+                    this.state.balance > 0 ? (React.createElement("div", { className: "balance" },
+                        "Balance: ",
+                        this.state.balance,
+                        "\u20AC")) : null),
                 React.createElement("main", null, this.props.children))));
     };
     return Table;
@@ -45117,6 +45140,9 @@ function createData(expenses) {
             legend: {
                 display: false,
             },
+            gridLines: {
+                display: false
+            },
             scales: {
                 yAxes: [{
                         ticks: {
@@ -45163,24 +45189,24 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(2);
 var Chip_1 = __webpack_require__(484);
-var api_1 = __webpack_require__(139);
+var api_1 = __webpack_require__(130);
 __webpack_require__(429);
 function buildRecommendations(destinations, persona) {
     return [
         {
             title: 'Explore something new',
             needs_credit: false,
-            destinations: destinations.filter(function (_) { return _.total_expense <= 700; })
+            destinations: destinations.filter(function (_) { return _.id == 'paris' || _.id == 'bercelona'; })
         },
         {
             title: 'It\'s been a couple of years…',
             needs_credit: false,
-            destinations: destinations.filter(function (_) { return _.total_expense > 700 && _.total_expense <= 1000; })
+            destinations: destinations.filter(function (_) { return _.id == 'london' || _.id == 'zurich'; })
         },
         {
-            title: 'Do more with a 200€ credit',
+            title: 'Or with a small credit:',
             needs_credit: true,
-            destinations: destinations.filter(function (_) { return _.total_expense > 1000; })
+            destinations: destinations.filter(function (_) { return _.id == 'nyc'; })
         }
     ];
 }
@@ -45228,7 +45254,12 @@ var DestinationPicker = (function (_super) {
                     React.createElement("span", { className: "recommendations__expense" },
                         "~",
                         destination.total_expense,
-                        "\u20AC"))); })))); }))));
+                        "\u20AC"))); })),
+                recommendation.needs_credit ? (React.createElement("div", { className: "recommendations__credit" },
+                    "Don't overdraw your credit card,",
+                    React.createElement("br", null),
+                    React.createElement("u", null, "get a 200\u20AC credit"),
+                    " instead")) : null)); }))));
     };
     return DestinationPicker;
 }(React.Component));
@@ -45257,7 +45288,7 @@ var Avatar_1 = __webpack_require__(482);
 var Tabs_1 = __webpack_require__(517);
 var List_1 = __webpack_require__(493);
 var Chart_1 = __webpack_require__(421);
-var api_1 = __webpack_require__(139);
+var api_1 = __webpack_require__(130);
 __webpack_require__(428);
 var Info = (function (_super) {
     __extends(Info, _super);
@@ -45269,8 +45300,8 @@ var Info = (function (_super) {
     Info.prototype.updateDetails = function () {
         var _this = this;
         var _a = this.props, destination = _a.destination, persona = _a.persona, duration = _a.duration, month = _a.month;
+        this.setState({ details: null });
         if (!destination || !persona || !duration) {
-            this.setState({ details: null });
             return;
         }
         api_1.getDestaintionDetails(destination, persona, duration, month).then(function (details) {
@@ -45290,41 +45321,47 @@ var Info = (function (_super) {
       this.setState({ persona })
     }*/
     Info.prototype.render = function () {
+        var _this = this;
         if (this.state.details == null) {
             return (React.createElement("div", null, "Loading..."));
         }
-        var flightCost = this.state.details.flights[0].total_price;
-        return (React.createElement("div", { style: { marginTop: 10 } },
+        var flightCost = parseInt(this.state.details.flights[0].total_price);
+        var otherCost = (function () {
+            var cost = 0;
+            for (var p in _this.state.details.expenses) {
+                cost += _this.state.details.expenses[p];
+            }
+            return cost;
+        })();
+        var totalCost = flightCost + otherCost;
+        return (React.createElement("div", { style: { marginTop: 10, position: 'relative' } },
             React.createElement("div", { className: "numbers" },
-                React.createElement("div", { style: { marginLeft: 5, marginRight: 10, marginTop: 8 } },
-                    "Approx.",
-                    React.createElement("br", null),
-                    "cost:"),
+                React.createElement("div", { style: { marginLeft: 110, marginRight: 25, marginTop: 8, opacity: 0.5 } }, "Estimated cost:"),
                 React.createElement("div", { className: "numbers__number" },
                     React.createElement("div", { className: "numbers__number-text" },
-                        flightCost,
+                        Math.round(flightCost),
                         "\u20AC"),
                     React.createElement("div", { className: "numbers__number-title" }, "getting there")),
                 React.createElement("div", { className: "numbers__sign" }, "+"),
                 React.createElement("div", { className: "numbers__number" },
                     React.createElement("div", { className: "numbers__number-text" },
-                        Math.round(this.props.destination.total_expense - flightCost),
+                        Math.round(otherCost),
                         "\u20AC"),
                     React.createElement("div", { className: "numbers__number-title" }, "being there")),
                 React.createElement("div", { className: "numbers__sign" }, "="),
                 React.createElement("div", { className: "numbers__number" },
                     React.createElement("div", { className: "numbers__number-text" },
-                        this.props.destination.total_expense,
+                        Math.round(totalCost),
                         "\u20AC"))),
-            React.createElement("div", { style: { position: 'absolute', right: 100, top: 50 }, onClick: this.props.onIncreaseDays }, "+1 day"),
-            React.createElement("div", { style: { position: 'absolute', right: 60, top: 50 }, onClick: this.props.onDecreaseDays }, "-1 day"),
+            React.createElement("div", { style: { position: 'absolute', right: 70, top: 10, fontSize: 0.9 }, onClick: this.props.onIncreaseDays }, "+1 day"),
+            React.createElement("div", { style: { position: 'absolute', right: 20, top: 10, fontSize: 0.9 }, onClick: this.props.onDecreaseDays }, "-1 day"),
             React.createElement("br", null),
             React.createElement(Tabs_1.Tabs, null,
                 React.createElement(Tabs_1.Tab, { label: "Detailed expenses" },
                     React.createElement(Chart_1.default, { expenses: this.state.details.expenses })),
                 React.createElement(Tabs_1.Tab, { label: "Recommendations" },
                     React.createElement("p", null, "Spend your money like the locals do!"),
-                    React.createElement(List_1.List, null, this.state.details.top_rated_local_busineses.map(function (business) { return (React.createElement(List_1.ListItem, { primaryText: business.business_name, secondaryText: business.category + ", usually for " + business.price + "\u20AC", leftAvatar: React.createElement(Avatar_1.default, { src: business.image_url }) })); }))),
+                    React.createElement(List_1.List, null, this.state.details.top_rated_local_busineses.map(function (business) { return (React.createElement(List_1.ListItem, { key: business.business_name, primaryText: business.business_name, secondaryText: business.category + ", usually for " + business.price + "\u20AC", leftAvatar: React.createElement(Avatar_1.default, { src: business.image_url }) })); }))),
                 React.createElement(Tabs_1.Tab, { label: "Money Hacks" },
                     React.createElement("div", null, [1, 2, 3].map(function (i) { return (React.createElement("img", { key: i, src: "./images/moneyhack" + i + ".png", className: "moneyhack-icon" })); }))),
                 React.createElement(Tabs_1.Tab, { label: "Treat Yourself" },
@@ -45357,7 +45394,7 @@ var AutoComplete_1 = __webpack_require__(480);
 var SelectField_1 = __webpack_require__(503);
 var MenuItem_1 = __webpack_require__(142);
 var RaisedButton_1 = __webpack_require__(501);
-var api_1 = __webpack_require__(139);
+var api_1 = __webpack_require__(130);
 function buildDataSource(destinations, onSelect) {
     return destinations.map(function (destination) { return ({
         id: destination.id,
@@ -61738,7 +61775,7 @@ var _propTypes = __webpack_require__(53);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _Paper = __webpack_require__(130);
+var _Paper = __webpack_require__(131);
 
 var _Paper2 = _interopRequireDefault(_Paper);
 
@@ -61905,7 +61942,7 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Paper = __webpack_require__(130);
+var _Paper = __webpack_require__(131);
 
 var _Paper2 = _interopRequireDefault(_Paper);
 
@@ -62075,7 +62112,7 @@ var _EnhancedButton = __webpack_require__(86);
 
 var _EnhancedButton2 = _interopRequireDefault(_EnhancedButton);
 
-var _Paper = __webpack_require__(130);
+var _Paper = __webpack_require__(131);
 
 var _Paper2 = _interopRequireDefault(_Paper);
 
@@ -68174,7 +68211,7 @@ module.exports = function(object, index, value){
 // all enumerable object keys, includes symbols
 var getKeys = __webpack_require__(91)
   , gOPS    = __webpack_require__(150)
-  , pIE     = __webpack_require__(131);
+  , pIE     = __webpack_require__(132);
 module.exports = function(it){
   var result     = getKeys(it)
     , getSymbols = gOPS.f;
@@ -68305,7 +68342,7 @@ module.exports = function(object, el){
 /* 562 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META     = __webpack_require__(132)('meta')
+var META     = __webpack_require__(133)('meta')
   , isObject = __webpack_require__(97)
   , has      = __webpack_require__(60)
   , setDesc  = __webpack_require__(52).f
@@ -68368,7 +68405,7 @@ var meta = module.exports = {
 // 19.1.2.1 Object.assign(target, source, ...)
 var getKeys  = __webpack_require__(91)
   , gOPS     = __webpack_require__(150)
-  , pIE      = __webpack_require__(131)
+  , pIE      = __webpack_require__(132)
   , toObject = __webpack_require__(100)
   , IObject  = __webpack_require__(387)
   , $assign  = Object.assign;
@@ -68685,7 +68722,7 @@ var global         = __webpack_require__(51)
   , $fails         = __webpack_require__(89)
   , shared         = __webpack_require__(153)
   , setToStringTag = __webpack_require__(151)
-  , uid            = __webpack_require__(132)
+  , uid            = __webpack_require__(133)
   , wks            = __webpack_require__(40)
   , wksExt         = __webpack_require__(157)
   , wksDefine      = __webpack_require__(156)
@@ -68824,7 +68861,7 @@ if(!USE_NATIVE){
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f   = $defineProperty;
   __webpack_require__(390).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(131).f  = $propertyIsEnumerable;
+  __webpack_require__(132).f  = $propertyIsEnumerable;
   __webpack_require__(150).f = $getOwnPropertySymbols;
 
   if(DESCRIPTORS && !__webpack_require__(148)){
@@ -69670,7 +69707,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = calc;
 
-var _joinPrefixedValue = __webpack_require__(133);
+var _joinPrefixedValue = __webpack_require__(134);
 
 var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
 
@@ -69701,7 +69738,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = cursor;
 
-var _joinPrefixedValue = __webpack_require__(133);
+var _joinPrefixedValue = __webpack_require__(134);
 
 var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
 
@@ -69835,7 +69872,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = gradient;
 
-var _joinPrefixedValue = __webpack_require__(133);
+var _joinPrefixedValue = __webpack_require__(134);
 
 var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
 
@@ -69884,7 +69921,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = sizing;
 
-var _joinPrefixedValue = __webpack_require__(133);
+var _joinPrefixedValue = __webpack_require__(134);
 
 var _joinPrefixedValue2 = _interopRequireDefault(_joinPrefixedValue);
 
@@ -76022,7 +76059,7 @@ function isActive(_ref, indexOnly, currentLocation, routes, params) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_history_lib_Actions__ = __webpack_require__(134);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_history_lib_Actions__ = __webpack_require__(135);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_history_lib_Actions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_history_lib_Actions__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
@@ -76514,7 +76551,7 @@ var _warning2 = _interopRequireDefault(_warning);
 
 var _LocationUtils = __webpack_require__(96);
 
-var _DOMUtils = __webpack_require__(135);
+var _DOMUtils = __webpack_require__(136);
 
 var _DOMStateStorage = __webpack_require__(411);
 
@@ -76694,7 +76731,7 @@ var _RefreshProtocol = __webpack_require__(660);
 
 var RefreshProtocol = _interopRequireWildcard(_RefreshProtocol);
 
-var _DOMUtils = __webpack_require__(135);
+var _DOMUtils = __webpack_require__(136);
 
 var _createHistory = __webpack_require__(256);
 
@@ -76790,7 +76827,7 @@ var _invariant2 = _interopRequireDefault(_invariant);
 
 var _ExecutionEnvironment = __webpack_require__(255);
 
-var _DOMUtils = __webpack_require__(135);
+var _DOMUtils = __webpack_require__(136);
 
 var _HashProtocol = __webpack_require__(659);
 
@@ -76950,7 +76987,7 @@ var _createHistory = __webpack_require__(256);
 
 var _createHistory2 = _interopRequireDefault(_createHistory);
 
-var _Actions = __webpack_require__(134);
+var _Actions = __webpack_require__(135);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77805,7 +77842,7 @@ module.exports = function(lastTouchEvent, clickTimestamp) {
 
 var _prodInvariant = __webpack_require__(28);
 
-var ReactChildren = __webpack_require__(137);
+var ReactChildren = __webpack_require__(138);
 var ReactElement = __webpack_require__(27);
 
 var emptyFunction = __webpack_require__(49);
@@ -78222,8 +78259,8 @@ module.exports = ReactTransitionGroup;
 
 
 
-var KeyEscapeUtils = __webpack_require__(136);
-var traverseAllChildren = __webpack_require__(138);
+var KeyEscapeUtils = __webpack_require__(137);
+var traverseAllChildren = __webpack_require__(139);
 var warning = __webpack_require__(19);
 
 var ReactComponentTreeHook;

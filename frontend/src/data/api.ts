@@ -23,7 +23,7 @@ export interface DestinationDetails {
   }[],
   flights: {
     class: string,
-    total_price: number
+    total_price: string
   }[]
 }
 
@@ -59,7 +59,7 @@ export const getBankAccountInfo = () => {
   let url = `https://start-hack.herokuapp.com/bankAccountInfo`
   console.log('Get bank account info', url)
   return fetch(url).then((response) => {
-    return response.text().then(text => parseInt(text) )
+    return response.json().then(json => json.balance )
   }, (error) => {
     console.error(error, error.stack);
     return null;
