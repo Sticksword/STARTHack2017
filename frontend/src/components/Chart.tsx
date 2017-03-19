@@ -16,7 +16,10 @@ function createData(expenses: {[key: string]: number}){
         labels: labels,
         datasets: [{
             label: 'Expenses',
-            data: data
+            data: data,
+            backgroundColor: [
+              '#55BAD1', '#55BAD1', '#55BAD1', '#55BAD1', '#55BAD1', '#55BAD1'
+            ]
         }]
     },
     options: {
