@@ -161,7 +161,7 @@ def bankAccountInfo():
 
 # Yelp API stuff
 @app.route('/businesses')
-def businesses(persona=None, loc=None):
+def businesses(loc=None, persona=None):
     with open('yelp_access_token', 'r') as f:
         token = f.read().strip()
 
@@ -247,7 +247,7 @@ def destinations():
 def planItinerary():
     destination = request.args.get('destination')
     persona = request.args.get('persona')
-    duration = request.args.get('duration')
+    duration = int(request.args.get('duration'))
     month = request.args.get('month')
 
     info = { 'name': destination }
@@ -255,12 +255,12 @@ def planItinerary():
     info['top_rated_local_busineses'] = buildBusinessExpenses(destination, persona)
     info['flights'] = buildFlightExpenses(destination, persona)
     info['expenses'] = {
-            'Accomodation': 159,
-            'Transport': 75,
-            'Culture': 49,
-            'Dining': 129,
-            'Shopping': 75,
-            'Other': 249
+            'Accomodation': 159 * duration,
+            'Transport': 75 * duration,
+            'Culture': 49 * duration,
+            'Dining': 129 * duration,
+            'Shopping': 75 * duration,
+            'Other': 249 * duration
         }
 
     return jsonify(info)
@@ -268,7 +268,7 @@ def planItinerary():
 
 # add yelp and amadeus integraton here
 def buildBusinessExpenses(destination, persona):
-    local_businesses = json.loads(businesses(persona, destination))
+    local_businesses = json.loads(businesses(destination, persona))
 
     potential_business_expenses = []
     for biz in local_businesses:
@@ -285,7 +285,7 @@ def buildBusinessExpenses(destination, persona):
 
 
 def buildFlightExpenses(destination, persona):
-    possible_flights = json.loads(flights())
+    possible_flights = json.loads(flights(destination, persona))
     group = 'economy'
     if persona == 'student':
         group = 'economy'
@@ -309,9 +309,19 @@ def buildFlightExpenses(destination, persona):
 # Amadeus API stuff
 
 @app.route('/flights')
-def flights():
-    orig = 'SFO'
+def flights(destination, persona):
+    orig = 'BER'
     dest = 'LON'
+    destination = dest.upper()
+    if destination == 'PARIS':
+        dest = 'CDG'
+    elif destionation == 'BARCELONA':
+        dest = 'BCN'
+    elif destionation == 'NYC':
+        dest = 'JFK'
+    elif destination == 'ZURICH':
+        dest = 'ZRH'
+        
     dep_date = '2017-05-01'
     ret_date = '2017-05-07'
     num_results = '3'
