@@ -295,6 +295,7 @@ def destinations():
     return jsonify(loc)
 
 @app.route('/details')
+@crossdomain(origin='*')
 def planItinerary():
     destination = request.args.get('destination')
     persona = request.args.get('persona')
