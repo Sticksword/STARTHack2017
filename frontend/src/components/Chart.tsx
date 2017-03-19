@@ -52,7 +52,7 @@ export default class Chart extends React.Component<Props, State> {
   }
   render() {
     return (
-      <canvas ref={ref => this._element = ref }></canvas>
+      <canvas style={{margin: 10}} height={100} ref={ref => this._element = ref }></canvas>
     )
   }
 }

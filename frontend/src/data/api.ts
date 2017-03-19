@@ -14,9 +14,18 @@ export interface DestinationDetails {
   name: string,
   expenses: {
     [key: string]: number
-  }
+  },
+  top_rated_local_busineses: {
+    business_name: string,
+    category: string,
+    price: number,
+    image_url?: string
+  }[],
+  flights: {
+    class: string,
+    total_price: number
+  }[]
 }
-
 
 export const getDestinations = (persona: string, duration: number, month: number) => {
   let url = `https://start-hack.herokuapp.com/destinations?persona=${persona}&duration=${duration}&month=${month}`
@@ -40,6 +49,17 @@ export const getDestaintionDetails = (destination: Destination, persona: string,
   console.log('Get details', url)
   return fetch(url).then((response) => {
     return response.json() as Promise<DestinationDetails>;
+  }, (error) => {
+    console.error(error, error.stack);
+    return null;
+  });
+};
+
+export const getBankAccountInfo = () => {
+  let url = `https://start-hack.herokuapp.com/bankAccountInfo`
+  console.log('Get bank account info', url)
+  return fetch(url).then((response) => {
+    return response.text().then(text => parseInt(text) )
   }, (error) => {
     console.error(error, error.stack);
     return null;
