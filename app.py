@@ -43,7 +43,7 @@ def init_db():
 
 @app.route('/')
 def index():
-    return 'hello world'
+    return render_template('login.html')
 
 
 @app.route('/js/<path:path>')
@@ -81,7 +81,7 @@ def auth_callback():
     with open('access_token', 'w') as f:
         f.write(res['access_token'])
     # in_memory_access_token.encode('ascii','ignore')
-    return 'login success! you can now visit localhost:5000/transactions or another endpoint for data'
+    return render_template('index.html')
     # can redirect here or something
 
 
