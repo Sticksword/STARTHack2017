@@ -10,6 +10,7 @@ body {
   color: #fff;
   text-align: center;
   font-size: 2.1rem;
+  margin-bottom: 5px;
 }
 .header__subtitle {
   color: #fff;
@@ -38,6 +39,12 @@ body {
 }
 .moneyhack-icon:last-child {
   margin-right: 0;
+}
+footer {
+  color: rgba(255,255,255,0.867);
+  font-size: 0.9rem;
+  margin: 10px 0 0 0;
+  text-align: center;
 }
 .recommendations {
   position: relative;

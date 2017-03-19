@@ -44847,7 +44847,8 @@ var Table = (function (_super) {
                         "Balance: ",
                         this.state.balance,
                         "\u20AC")) : null),
-                React.createElement("main", null, this.props.children))));
+                React.createElement("main", null, this.props.children),
+                React.createElement("footer", null, "Partner of Deutsche Bank, Yelp & Amadeus"))));
     };
     return Table;
 }(React.Component));
