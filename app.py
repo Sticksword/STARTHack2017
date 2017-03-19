@@ -10,7 +10,7 @@ import random
 
 from flask import Flask, g, url_for, redirect, request, make_response, send_from_directory, render_template, jsonify, render_template_string
 
-from test_email import send_email
+import test_email
 
 # Flask app should start in global layout
 app = Flask(__name__, static_url_path='')
@@ -320,7 +320,7 @@ def planItinerary():
             'Other': 19 * duration
         }
 
-    send_email()
+    test_email.send_email()
     return jsonify(info)
 
 
